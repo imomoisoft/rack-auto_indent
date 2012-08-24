@@ -1,8 +1,9 @@
 source :rubygems
 
-gem 'jeweler'
+gem 'jeweler', :group => :development
+gem 'nokogiri', :group => :development
+
 
 group :test do
-  gem 'nokogiri'
   gem 'rspec'
 end
