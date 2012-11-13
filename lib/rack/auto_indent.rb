@@ -9,7 +9,7 @@ module Rack
     def call(env)
       status, headers, response = @app.call(env)
 
-      if headers["Content-Type"].include?("application/xml")
+      if (headers["Content-Type"] || '').include?("application/xml")
         headers.delete('Content-Length')
         xml = Nokogiri::XML(response.respond_to?(:body) ? response.body : response) { |x| x.noblanks }
         formatted_response = Rack::Response.new(
