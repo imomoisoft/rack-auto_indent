@@ -8,10 +8,11 @@ module Rack
 
     def call(env)
       status, headers, response = @app.call(env)
+      body = response.respond_to?(:body) ? response.body : response
 
-      if (headers["Content-Type"] || '').include?("application/xml")
+      if !body.blank? && (headers["Content-Type"] || '').include?("application/xml")
         headers.delete('Content-Length')
-        xml = Nokogiri::XML(response.respond_to?(:body) ? response.body : response) { |x| x.noblanks }
+        xml = Nokogiri::XML(body) { |x| x.noblanks }
         formatted_response = Rack::Response.new(
           xml.to_xml,
           status,
